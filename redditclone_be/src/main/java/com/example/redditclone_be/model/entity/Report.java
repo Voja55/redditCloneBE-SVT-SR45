@@ -11,14 +11,17 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Reaction {
+public class Report {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private EReactionType type;
+    @Enumerated(EnumType.STRING)
+    private EReportReason reason;
 
-    @Column(nullable = false)
     private LocalDate timestamp;
+
+    @OneToOne
+    private User byUser;
 }

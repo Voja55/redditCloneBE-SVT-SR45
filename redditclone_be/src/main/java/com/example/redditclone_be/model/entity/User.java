@@ -13,7 +13,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -24,13 +24,14 @@ public class User {
     @Column(nullable = false)
     private  String email;
 
-    @Column(nullable = false)
+    @Column()
     private String avatar;
 
     @Column(nullable = false)
     private LocalDate regDate;
 
-    @Column(nullable = false)
+    @Column
+    @Lob
     private String description;
 
     @Column(nullable = false, unique = true)
