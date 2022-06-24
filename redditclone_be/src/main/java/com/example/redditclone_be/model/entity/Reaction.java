@@ -3,6 +3,7 @@ package com.example.redditclone_be.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +20,10 @@ public class Reaction {
     @Column(nullable = false)
     private EReactionType type;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDate timestamp;
+
+    @ManyToOne
+    private User madeby;
 }

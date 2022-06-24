@@ -3,6 +3,7 @@ package com.example.redditclone_be.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,10 +19,19 @@ public class Report {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private EReportReason reason;
 
+    @CreationTimestamp
+    @Column(nullable = false)
     private LocalDate timestamp;
 
-    @OneToOne
+    @ManyToOne
     private User byUser;
+
+    @ManyToOne
+    private Comment comment;
+
+    @ManyToOne
+    private Post post;
 }

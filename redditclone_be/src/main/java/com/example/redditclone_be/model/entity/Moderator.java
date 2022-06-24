@@ -1,27 +1,22 @@
 package com.example.redditclone_be.model.entity;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-public class Banned {
+public class Moderator {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
-    @Column
-    private LocalDate timeStamp;
-
-//    private Moderator by;
-
+    @ManyToOne
+    private User user;
 }
-
