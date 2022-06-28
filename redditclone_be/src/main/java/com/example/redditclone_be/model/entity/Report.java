@@ -29,9 +29,14 @@ public class Report {
     @ManyToOne
     private User byUser;
 
+    @Column(nullable = false)
+    private Boolean accepted;
+
     @ManyToOne
     private Comment comment;
 
     @ManyToOne
     private Post post;
+
+
 }

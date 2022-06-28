@@ -21,7 +21,14 @@ public class Banned {
     @Column
     private LocalDate timeStamp;
 
-//    private Moderator by;
+    @ManyToOne
+    private Moderator bannedBy;
+
+    @ManyToOne
+    private User isBanned;
+
+    @ManyToOne
+    private Community bannedIn;
 
 }
 

@@ -40,21 +40,27 @@ public class User {
     @Lob
     private String description;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false/*, unique = true */)
     private  String displayName;
+
+    @Column(nullable = false)
+    private ERole role;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postedBy")
     private Set<Post> posts = new HashSet<Post>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "belongsTo")
     private Set<Comment> comments = new HashSet<Comment>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "madeBy")
     private Set<Reaction> reactions = new HashSet<Reaction>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "byUser")
     private Set<Report> reports = new HashSet<Report>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "isBanned")
+    private Set<Banned> banned = new HashSet<Banned>();
 }

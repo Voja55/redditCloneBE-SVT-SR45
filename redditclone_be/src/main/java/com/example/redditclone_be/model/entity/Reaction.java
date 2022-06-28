@@ -25,5 +25,11 @@ public class Reaction {
     private LocalDate timestamp;
 
     @ManyToOne
-    private User madeby;
+    private User madeBy;
+
+    @ManyToOne
+    private Post reactingOnPost;
+
+    @ManyToOne
+    private Comment reactingOnCom;
 }

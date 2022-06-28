@@ -32,9 +32,21 @@ public class Comment {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "repliesTo")
     private Set<Comment> replies = new HashSet<Comment>();
 
     @ManyToOne
     private Comment repliesTo;
+
+    @ManyToOne
+    private Post commentsOn;
+
+    @ManyToOne
+    private User belongsTo;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
+    private Set<Report> reports = new HashSet<Report>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reactingOnCom")
+    private Set<Reaction> reactions = new HashSet<Reaction>();
 }

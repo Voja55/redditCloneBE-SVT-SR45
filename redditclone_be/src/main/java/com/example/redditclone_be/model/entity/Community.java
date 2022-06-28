@@ -39,4 +39,16 @@ public class Community {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<Post>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bannedIn")
+    private Set<Banned> bans = new HashSet<Banned>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "community")
+    private Set<Moderator> moderators = new HashSet<Moderator>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "belongsTo")
+    private Set<Rule> rules = new HashSet<Rule>();
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Flair> flairs = new HashSet<Flair>();
+
 }

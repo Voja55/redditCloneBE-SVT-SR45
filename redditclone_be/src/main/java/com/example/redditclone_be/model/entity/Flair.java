@@ -23,6 +23,6 @@ public class Flair {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Community> communities = new HashSet<Community>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "flair")
     private Set<Post> posts = new HashSet<Post>();
 }
