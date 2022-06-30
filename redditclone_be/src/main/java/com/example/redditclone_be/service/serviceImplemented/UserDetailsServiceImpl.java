@@ -3,7 +3,6 @@ package com.example.redditclone_be.service.serviceImplemented;
 import com.example.redditclone_be.model.entity.User;
 import com.example.redditclone_be.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,8 +18,13 @@ import java.util.List;
 @Primary
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+
+    final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserDetailsServiceImpl(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

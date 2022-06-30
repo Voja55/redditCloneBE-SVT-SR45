@@ -24,7 +24,7 @@ public class UserDTO {
     private String email;
 
     private String avatar;
-    @NotBlank
+
     private LocalDate regDate;
 
     private String description;
@@ -33,5 +33,10 @@ public class UserDTO {
 
     public UserDTO(User createdUser){
         this.id = createdUser.getId();
+        this.username = createdUser.getUsername();
+        this.email = createdUser.getEmail();
+        this.regDate = createdUser.getRegDate();
+        this.description = createdUser.getDescription();
+        this.displayName = createdUser.getDisplayName();
     }
 }

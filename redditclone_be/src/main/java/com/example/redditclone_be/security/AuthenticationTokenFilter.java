@@ -27,7 +27,6 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
             throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader("Authorization");
-
         if(token != null){
             if(token.startsWith("Bearer ")){
                 token = token.substring(7);

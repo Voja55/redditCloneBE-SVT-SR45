@@ -17,15 +17,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
@@ -34,6 +33,7 @@ public class UserController {
     @Autowired
     TokenUtils tokenUtils;
 
+    @Autowired
     AuthenticationManager authenticationManager;
 
 
@@ -50,7 +50,7 @@ public class UserController {
         return new ResponseEntity(userDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/testurl")
+    @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
@@ -71,9 +71,14 @@ public class UserController {
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
 
-    @GetMapping("/users")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all")
+    //@PreAuthorize("hasRole('USER')")
     private List<User> usersList(){
-        return this.userService.getAllUsers();
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/myprofile")
+    private User user (Principal user) {
+        return userService.findByUsername(user.getName());
     }
 }

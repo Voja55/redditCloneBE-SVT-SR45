@@ -15,11 +15,16 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+
+    final UserRepository userRepository;
+
+    final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User createUser(UserDTO userDTO) {
@@ -42,8 +47,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return null;
+    public List<User> getAllUsers()  {
+        List<User> usersList = userRepository.findAll();
+        return usersList;
     }
 
     @Override

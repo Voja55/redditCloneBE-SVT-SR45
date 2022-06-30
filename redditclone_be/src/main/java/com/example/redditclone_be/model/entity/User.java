@@ -1,5 +1,6 @@
 package com.example.redditclone_be.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,23 +45,30 @@ public class User {
     private  String displayName;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ERole role;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonIgnore
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postedBy")
+    @JsonIgnore
     private Set<Post> posts = new HashSet<Post>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "belongsTo")
+    @JsonIgnore
     private Set<Comment> comments = new HashSet<Comment>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "madeBy")
+    @JsonIgnore
     private Set<Reaction> reactions = new HashSet<Reaction>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "byUser")
+    @JsonIgnore
     private Set<Report> reports = new HashSet<Report>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "isBanned")
+    @JsonIgnore
     private Set<Banned> banned = new HashSet<Banned>();
 }
