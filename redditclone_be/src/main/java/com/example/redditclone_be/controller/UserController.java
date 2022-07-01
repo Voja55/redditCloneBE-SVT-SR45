@@ -7,6 +7,8 @@ import com.example.redditclone_be.model.dto.UserTokenState;
 import com.example.redditclone_be.model.entity.User;
 import com.example.redditclone_be.security.TokenUtils;
 import com.example.redditclone_be.service.UserService;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +26,23 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/users")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    final UserService userService;
 
     @Autowired
     TokenUtils tokenUtils;
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    final ModelMapper modelMapper;
+
+    public UserController(UserService userService, ModelMapper modelMapper) {
+        this.userService = userService;
+        this.modelMapper = modelMapper;
+    }
 
 
     @PostMapping("/registration")
@@ -51,6 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin
     public ResponseEntity<UserTokenState> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
@@ -72,13 +81,24 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    //@PreAuthorize("hasRole('USER')")
-    private List<User> usersList(){
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> usersList(){
         return userService.getAllUsers();
     }
+//
+//    @GetMapping("/myprofile")
+//    //@PreAuthorize("hasRole('ROLE_USER')")
+//    @PreAuthorize("hasRole('ROLE_USER')")
+//    private User user (Principal user) {
+//        return userService.findByUsername(user.getName());
+//    }
 
-    @GetMapping("/myprofile")
-    private User user (Principal user) {
-        return userService.findByUsername(user.getName());
+    @GetMapping("/whoami")
+    @CrossOrigin
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public UserDTO user(Principal user) {
+        return modelMapper.map(userService.findByUsername(user.getName()), UserDTO.class);
     }
+
+
 }

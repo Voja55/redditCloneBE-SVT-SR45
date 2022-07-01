@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         //newUser.setAvatar(userDTO.getAvatar());
         newUser.setDescription(userDTO.getDescription());
         newUser.setDisplayName(userDTO.getDisplayName());
-        newUser.setRole(ERole.USER);
+        newUser.setRole(ERole.ADMIN);
         newUser = userRepository.save(newUser);
         return newUser;
     }

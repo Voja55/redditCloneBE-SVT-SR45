@@ -1,5 +1,6 @@
 package com.example.redditclone_be.model.dto;
 
+import com.example.redditclone_be.model.entity.ERole;
 import com.example.redditclone_be.model.entity.User;
 
 import lombok.Getter;
@@ -16,20 +17,14 @@ import java.time.LocalDate;
 public class UserDTO {
 
     private Long id;
-    @NotBlank
     private String username;
-    @NotBlank
     private String password;
-    @NotBlank
     private String email;
-
     private String avatar;
-
     private LocalDate regDate;
-
     private String description;
-    @NotBlank
     private  String displayName;
+    private ERole role;
 
     public UserDTO(User createdUser){
         this.id = createdUser.getId();
@@ -38,5 +33,6 @@ public class UserDTO {
         this.regDate = createdUser.getRegDate();
         this.description = createdUser.getDescription();
         this.displayName = createdUser.getDisplayName();
+        this.role = createdUser.getRole();
     }
 }

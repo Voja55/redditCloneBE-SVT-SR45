@@ -18,4 +18,9 @@ public class Administrator extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+//    @Override
+//    public String getRole(){
+//        return "ADMIN";
+//    }
 }

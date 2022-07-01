@@ -57,22 +57,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception{
-        //Naglasavamo browser-u da ne cache-ira podatke koje dobije u header-ima
-        //detaljnije: https://www.baeldung.com/spring-security-cache-control-headers
         httpSecurity.headers().cacheControl().disable();
-        //Neophodno da ne bi proveravali autentifikaciju kod Preflight zahteva
         httpSecurity.cors();
-        //sledeca linija je neophodna iskljucivo zbog nacina na koji h2 konzola komunicira sa aplikacijom
-        httpSecurity.headers().frameOptions().disable();
+
         httpSecurity.csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/users/all").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/myprofile").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/registration").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/all").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/whoami").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/users/myprofile").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users/registration").permitAll()
                 .anyRequest().authenticated();
 
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
