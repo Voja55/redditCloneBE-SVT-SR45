@@ -26,7 +26,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("users")
 public class UserController {
 
     final UserService userService;
@@ -93,11 +93,15 @@ public class UserController {
 //        return userService.findByUsername(user.getName());
 //    }
 
-    @GetMapping("/whoami")
+    @GetMapping("/profile")
     @CrossOrigin
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public UserDTO user(Principal user) {
         return modelMapper.map(userService.findByUsername(user.getName()), UserDTO.class);
+    }
+
+    public void Logout(){
+
     }
 
 

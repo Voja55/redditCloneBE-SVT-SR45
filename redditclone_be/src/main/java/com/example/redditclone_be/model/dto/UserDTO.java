@@ -23,7 +23,7 @@ public class UserDTO {
     private String avatar;
     private LocalDate regDate;
     private String description;
-    private  String displayName;
+    private String displayName;
     private ERole role;
 
     public UserDTO(User createdUser){

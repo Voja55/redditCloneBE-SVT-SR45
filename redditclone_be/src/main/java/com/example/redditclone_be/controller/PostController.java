@@ -1,12 +1,20 @@
 package com.example.redditclone_be.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.redditclone_be.model.entity.Post;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping
 public class PostController {
 
+//    @GetMapping("/community/{commId}/posts")
+//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+//    public @ResponseBody List<Post> communityPosts(@PathVariable(value = "commId") Long id){
+//        return ;
+//    }
 
 }
