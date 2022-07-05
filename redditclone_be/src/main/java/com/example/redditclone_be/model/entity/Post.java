@@ -1,5 +1,6 @@
 package com.example.redditclone_be.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,12 +44,15 @@ public class Post{
     private Flair flair;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "commentsOn")
+    @JsonIgnore
     private Set<Comment> comments = new HashSet<Comment>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reactingOnPost")
+    @JsonIgnore
     private Set<Reaction> reactions = new HashSet<Reaction>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
+    @JsonIgnore
     private Set<Report> reports = new HashSet<Report>();
 }
 

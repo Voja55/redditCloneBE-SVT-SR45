@@ -24,7 +24,20 @@ public class PostServiceImplemented implements PostService {
 
     @Override
     public Post createPost(PostDTO postDTO) {
-        return null;
+
+//        Optional<Post> post = postRepository.findById(postDTO.getId());
+//        if(post.isPresent()){
+//            return null;
+//        }
+        Post newPost = new Post();
+        newPost.setTitle(postDTO.getTitle());
+        newPost.setText(postDTO.getText());
+        newPost.setCommunity(postDTO.getCommunity());
+        newPost.setPostedBy(postDTO.getPostedBy());
+
+        newPost = postRepository.save(newPost);
+
+        return newPost;
     }
 
     @Override

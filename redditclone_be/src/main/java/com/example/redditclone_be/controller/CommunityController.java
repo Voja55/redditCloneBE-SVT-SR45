@@ -72,7 +72,6 @@ public class CommunityController {
     }
 
     @GetMapping("/{commID}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public CommunityDTO community(@PathVariable(value = "commID") Long id){
         return modelMapper.map(communityService.findById(id), CommunityDTO.class);
     }
