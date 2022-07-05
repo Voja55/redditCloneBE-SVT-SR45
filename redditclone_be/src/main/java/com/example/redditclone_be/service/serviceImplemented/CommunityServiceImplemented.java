@@ -49,4 +49,14 @@ public class CommunityServiceImplemented implements CommunityService {
         }
         return null;
     }
+
+    @Override
+    public Community saveComm(Community community) {
+        return communityRepository.save(community);
+    }
+
+    @Override
+    public List<Community> allCommunitiesAvailable() {
+        return communityRepository.findAllAvailable();
+    }
 }

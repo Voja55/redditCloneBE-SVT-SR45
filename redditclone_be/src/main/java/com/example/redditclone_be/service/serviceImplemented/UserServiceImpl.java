@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         //newUser.setAvatar(userDTO.getAvatar());
         newUser.setDescription(userDTO.getDescription());
         newUser.setDisplayName(userDTO.getDisplayName());
-        newUser.setRole(ERole.ADMIN);
+        newUser.setRole(ERole.USER);
         newUser = userRepository.save(newUser);
         return newUser;
     }
@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
             return user.get();
         }
         return null;
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
 

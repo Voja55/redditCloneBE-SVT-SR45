@@ -10,4 +10,6 @@ public interface CommunityService {
     Community createCommunity(CommunityDTO communityDTO);
     List<Community> allCommunities();
     Community findById(Long id);
+    Community saveComm(Community community);
+    List<Community> allCommunitiesAvailable();
 }

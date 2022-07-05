@@ -1,5 +1,6 @@
 package com.example.redditclone_be.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,18 +38,23 @@ public class Community {
     private String suspendedReason;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "community")
+    @JsonIgnore
     private Set<Post> posts = new HashSet<Post>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bannedIn")
+    @JsonIgnore
     private Set<Banned> bans = new HashSet<Banned>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "community")
+    @JsonIgnore
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "belongsTo")
+    @JsonIgnore
     private Set<Rule> rules = new HashSet<Rule>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Flair> flairs = new HashSet<Flair>();
 
 }
