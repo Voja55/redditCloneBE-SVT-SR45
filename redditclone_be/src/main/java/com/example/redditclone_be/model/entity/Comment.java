@@ -1,6 +1,7 @@
 package com.example.redditclone_be.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,7 @@ public class Comment {
     private boolean isDeleted;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "repliesTo")
+    @JsonIgnore
     private Set<Comment> replies = new HashSet<Comment>();
 
     @ManyToOne
@@ -45,8 +47,10 @@ public class Comment {
     private User belongsTo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "comment")
+    @JsonIgnore
     private Set<Report> reports = new HashSet<Report>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reactingOnCom")
+    @JsonIgnore
     private Set<Reaction> reactions = new HashSet<Reaction>();
 }

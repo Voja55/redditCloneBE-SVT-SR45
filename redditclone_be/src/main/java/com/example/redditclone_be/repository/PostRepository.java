@@ -14,4 +14,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     public List<Post> findAllByCommunity(Community community);
     public List<Post> findAllByPostedBy(User user);
+    public Optional<Post> findFirstById(Long id);
 }

@@ -2,16 +2,15 @@ package com.example.redditclone_be.controller;
 
 
 import com.example.redditclone_be.model.dto.PostDTO;
-import com.example.redditclone_be.model.entity.Community;
-import com.example.redditclone_be.model.entity.Post;
-import com.example.redditclone_be.model.entity.User;
+import com.example.redditclone_be.model.dto.ReactDTO;
+import com.example.redditclone_be.model.entity.*;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.PostService;
+import com.example.redditclone_be.service.ReactionService;
 import com.example.redditclone_be.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +24,13 @@ public class PostController {
     final PostService postService;
     final UserService userService;
     final CommunityService communityService;
+    final ReactionService reactionService;
 
-    public PostController(PostService postService, UserService userService, CommunityService communityService) {
+    public PostController(PostService postService, UserService userService, CommunityService communityService, ReactionService reactionService) {
         this.postService = postService;
         this.userService = userService;
         this.communityService = communityService;
+        this.reactionService = reactionService;
     }
 
     @PostMapping("/community/{commID}/create")
@@ -52,6 +53,15 @@ public class PostController {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         PostDTO postDTO = new PostDTO(createdPost);
+
+        ReactDTO reactDTO = new ReactDTO();
+        reactDTO.setType(EReactionType.UPVOTE);
+        reactDTO.setMadeBy(user);
+        reactDTO.setReactingOnPost(createdPost);
+
+        Reaction newReact = reactionService.createReact(reactDTO);
+
+        ReactDTO newReactDTO = new ReactDTO(newReact);
 
         return new ResponseEntity(postDTO, HttpStatus.CREATED);
     }

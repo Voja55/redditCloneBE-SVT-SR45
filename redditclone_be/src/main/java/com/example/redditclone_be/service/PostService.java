@@ -12,4 +12,6 @@ public interface PostService {
     List<Post> findPostsByCommunity(Long commId);
 
     List<Post> findPostsByUser(Long userId);
+
+    Post findPostById(Long postId);
 }
