@@ -9,11 +9,13 @@ import com.example.redditclone_be.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
+@RestController
+@RequestMapping
 public class ReactController {
 
     final UserService userService;
@@ -29,7 +31,22 @@ public class ReactController {
     }
 
 
-    //TODO: kreiranje reakcija na post
+    @GetMapping("/post/{postId}/karma")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Integer postKarma(@PathVariable(value = "postId") Long postId){
+        Integer karma = 0;
+        List<Reaction> reactions = reactionService.findReactionsByPost(postId);
+        for(Reaction reaction : reactions){
+            if(reaction.getType().equals(EReactionType.UPVOTE)){
+                karma += 1;
+            } else if (reaction.getType().equals(EReactionType.DOWNVOTE)) {
+                karma -= 1;
+            }
+        }
+
+        return karma;
+    }
+
     @PostMapping("/post/{postID}/upvote")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReactDTO> upvotePost(@PathVariable(value = "postID") Long postId, Principal userinfo){
@@ -77,7 +94,22 @@ public class ReactController {
         return new ResponseEntity(newReactDTO, HttpStatus.OK);
     }
 
-    //TODO: kreiranje reakcija na com
+    @GetMapping("/comment/{comId}/karma")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Integer comKarma(@PathVariable(value = "comId") Long comId){
+        Integer karma = 0;
+        List<Reaction> reactions = reactionService.findReactionsByComment(comId);
+        for(Reaction reaction : reactions){
+            if(reaction.getType().equals(EReactionType.UPVOTE)){
+                karma += 1;
+            } else if (reaction.getType().equals(EReactionType.DOWNVOTE)) {
+                karma -= 1;
+            }
+        }
+
+        return karma;
+    }
+
     @PostMapping("/comment/{commentID}/upvote")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReactDTO> upvoteCom(@PathVariable(value = "commentID") Long commentId, Principal userinfo){

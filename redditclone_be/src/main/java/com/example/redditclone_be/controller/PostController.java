@@ -68,10 +68,10 @@ public class PostController {
 
 
     @GetMapping("/community/{commId}/posts")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public @ResponseBody
-    List<Post> communityPosts(@PathVariable(value = "commId") Long id){
+    //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public List<Post> communityPosts(@PathVariable(value = "commId") Long id){
         return postService.findPostsByCommunity(id);
     }
 
+    //TODO: random postovi - home page
 }

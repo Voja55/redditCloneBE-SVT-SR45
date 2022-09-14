@@ -5,8 +5,11 @@ import com.example.redditclone_be.model.dto.JwtAuthenticationRequest;
 import com.example.redditclone_be.model.dto.PassChangeDTO;
 import com.example.redditclone_be.model.dto.UserDTO;
 import com.example.redditclone_be.model.dto.UserTokenState;
+import com.example.redditclone_be.model.entity.EReactionType;
+import com.example.redditclone_be.model.entity.Reaction;
 import com.example.redditclone_be.model.entity.User;
 import com.example.redditclone_be.security.TokenUtils;
+import com.example.redditclone_be.service.ReactionService;
 import com.example.redditclone_be.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,8 @@ public class UserController {
 
     final UserService userService;
 
+    final ReactionService reactionService;
+
     @Autowired
     TokenUtils tokenUtils;
 
@@ -42,8 +47,9 @@ public class UserController {
 
     final ModelMapper modelMapper;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserController(UserService userService, ReactionService reactionService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userService = userService;
+        this.reactionService = reactionService;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
     }
@@ -88,6 +94,21 @@ public class UserController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public UserDTO user(Principal user) {
         return modelMapper.map(userService.findByUsername(user.getName()), UserDTO.class);
+    }
+
+    @GetMapping("/mykarma")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public Integer userKarma(Principal user) {
+        Integer karma = 0;
+        List<Reaction> reactions = reactionService.findReactionsByUser(user.getName());
+        for(Reaction reaction : reactions){
+            if(reaction.getType().equals(EReactionType.UPVOTE)){
+                karma += 1;
+            } else if (reaction.getType().equals(EReactionType.DOWNVOTE)) {
+                karma -= 1;
+            }
+        }
+        return karma;
     }
 
     @PutMapping(value = "/change-password", consumes = "application/json")

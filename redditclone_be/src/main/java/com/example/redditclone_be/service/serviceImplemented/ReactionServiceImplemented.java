@@ -1,18 +1,54 @@
 package com.example.redditclone_be.service.serviceImplemented;
 
 import com.example.redditclone_be.model.dto.ReactDTO;
+import com.example.redditclone_be.model.entity.Comment;
+import com.example.redditclone_be.model.entity.Post;
 import com.example.redditclone_be.model.entity.Reaction;
+import com.example.redditclone_be.model.entity.User;
 import com.example.redditclone_be.repository.ReactionRepository;
+import com.example.redditclone_be.service.CommentService;
+import com.example.redditclone_be.service.PostService;
 import com.example.redditclone_be.service.ReactionService;
+import com.example.redditclone_be.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReactionServiceImplemented implements ReactionService {
 
     final ReactionRepository reactionRepository;
+    final PostService postService;
+    final CommentService comService;
+    final UserService userService;
 
-    public ReactionServiceImplemented(ReactionRepository reactionRepository) {
+    public ReactionServiceImplemented(ReactionRepository reactionRepository, PostService postService, CommentService comService, UserService userService) {
         this.reactionRepository = reactionRepository;
+        this.postService = postService;
+        this.comService = comService;
+        this.userService = userService;
+    }
+
+    @Override
+    public List<Reaction> findReactionsByPost(Long postId) {
+        Post post = postService.findPostById(postId);
+        List<Reaction> reactions = reactionRepository.findAllByReactingOnPost(post);
+
+        return reactions;
+    }
+
+    @Override
+    public List<Reaction> findReactionsByComment(Long commId) {
+        Comment comment = comService.findCommentById(commId);
+        List<Reaction> reactions = reactionRepository.findAllByReactingOnCom(comment);
+        return reactions;
+    }
+
+    @Override
+    public List<Reaction> findReactionsByUser(String username) {
+        User user = userService.findByUsername(username);
+        List<Reaction> reactions = reactionRepository.findAllByMadeBy(user);
+        return reactions;
     }
 
     @Override
