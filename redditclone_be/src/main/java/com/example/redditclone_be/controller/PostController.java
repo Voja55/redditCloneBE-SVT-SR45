@@ -68,10 +68,28 @@ public class PostController {
 
 
     @GetMapping("/community/{commId}/posts")
-    //@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<Post> communityPosts(@PathVariable(value = "commId") Long id){
         return postService.findPostsByCommunity(id);
     }
 
-    //TODO: random postovi - home page
+    @GetMapping("/userPosts")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public List<Post> userPosts(Principal userInfo){
+        User user = userService.findByUsername(userInfo.getName());
+        return postService.findPostsByUser(user);
+    }
+    @GetMapping("/home")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public List<Post> homePage(){
+        return postService.findAllHome();
+    }
+
+    @GetMapping("/post/{postId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Post getPost(@PathVariable(value="postId") Long id){
+        return postService.findPostById(id);
+    }
+
+
 }

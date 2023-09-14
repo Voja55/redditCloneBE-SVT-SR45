@@ -5,6 +5,7 @@ import com.example.redditclone_be.model.dto.ReactDTO;
 import com.example.redditclone_be.model.entity.Community;
 import com.example.redditclone_be.model.entity.EReactionType;
 import com.example.redditclone_be.model.entity.Post;
+import com.example.redditclone_be.model.entity.User;
 import com.example.redditclone_be.repository.PostRepository;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.PostService;
@@ -12,6 +13,7 @@ import com.example.redditclone_be.service.ReactionService;
 import com.example.redditclone_be.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,8 +55,15 @@ public class PostServiceImplemented implements PostService {
     }
 
     @Override
-    public List<Post> findPostsByUser(Long userId) {
-        return null;
+    public List<Post> findPostsByUser(User user) {
+        return postRepository.findAllByPostedBy(user);
+    }
+
+    @Override
+    public List<Post> findAllHome() {
+        List<Post> posts = postRepository.findAll();
+        Collections.shuffle(posts);
+        return posts;
     }
 
     @Override
