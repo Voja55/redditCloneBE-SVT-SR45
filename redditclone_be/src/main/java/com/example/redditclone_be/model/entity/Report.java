@@ -35,8 +35,8 @@ public class Report {
     @ManyToOne
     private Comment comment;
 
-    @ManyToOne
-    private Post post;
+    @Column
+    private String postId;
 
 
 }

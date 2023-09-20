@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ModeratorRepository extends JpaRepository<Moderator, Long> {
 
-    public void deleteAllByCommunity(Community community);
+    public void deleteAllByCommunityId(String community);
 }

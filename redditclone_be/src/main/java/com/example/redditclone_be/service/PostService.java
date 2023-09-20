@@ -3,18 +3,19 @@ package com.example.redditclone_be.service;
 import com.example.redditclone_be.model.dto.PostDTO;
 import com.example.redditclone_be.model.entity.Post;
 import com.example.redditclone_be.model.entity.User;
+import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 
 import java.util.List;
 
 public interface PostService {
 
-    Post createPost(PostDTO postDTO);
+    PostES createPost(PostDTO postDTO);
 
-    List<Post> findPostsByCommunity(Long commId);
+    List<PostES> findPostsByCommunity(String commId);
 
-    List<Post> findPostsByUser(User user);
+    List<PostES> findPostsByUser(String user);
 
-    List<Post> findAllHome();
+    List<PostES> findAllHome();
 
-    Post findPostById(Long postId);
+    PostES findPostById(String postId);
 }

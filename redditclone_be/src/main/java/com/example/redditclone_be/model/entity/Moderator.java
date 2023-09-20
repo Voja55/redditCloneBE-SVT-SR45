@@ -41,6 +41,6 @@ public class Moderator {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bannedBy")
     private Set<Banned> bans = new HashSet<Banned>();
 
-    @ManyToOne
-    private Community community;
+    @Column
+    private String communityId;
 }

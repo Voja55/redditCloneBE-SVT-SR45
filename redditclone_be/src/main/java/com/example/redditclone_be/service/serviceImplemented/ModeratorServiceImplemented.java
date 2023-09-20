@@ -25,7 +25,7 @@ public class ModeratorServiceImplemented implements ModeratorService {
 
        Moderator newModerator = new Moderator();
        newModerator.setUser(moderatorDTO.getUser());
-       newModerator.setCommunity(moderatorDTO.getCommunity());
+       newModerator.setCommunityId(moderatorDTO.getCommunity());
 
        newModerator = moderatorRepository.save(newModerator);
 
@@ -53,7 +53,7 @@ public class ModeratorServiceImplemented implements ModeratorService {
     }
 
     @Override
-    public void deleteModeratorsByCommunity(Community community) {
-        moderatorRepository.deleteAllByCommunity(community);
+    public void deleteModeratorsByCommunity(String community) {
+        moderatorRepository.deleteAllByCommunityId(community);
     }
 }

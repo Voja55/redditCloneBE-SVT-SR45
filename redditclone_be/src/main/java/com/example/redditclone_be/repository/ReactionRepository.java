@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
-    public List<Reaction> findAllByReactingOnPost(Post post);
+    public List<Reaction> findAllByReactingOnPost(String postId);
     public List<Reaction> findAllByReactingOnCom(Comment comment);
     public List<Reaction> findAllByMadeBy(User user);
 }

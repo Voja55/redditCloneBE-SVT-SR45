@@ -24,7 +24,7 @@ public class CommentDTO {
     private LocalDate timestamp;
     private boolean isDeleted;
     private Comment repliesTo;
-    private Post commentsOn;
+    private String commentsOn;
     private User belongsTo;
 
     public CommentDTO(Comment createdComment){

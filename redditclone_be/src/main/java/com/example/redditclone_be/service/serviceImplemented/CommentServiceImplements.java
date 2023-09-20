@@ -46,7 +46,7 @@ public class CommentServiceImplements implements CommentService {
     }
 
     @Override
-    public List<Comment> findCommentsByPost(Post post) {
+    public List<Comment> findCommentsByPost(String post) {
         return commentRepository.findAllByCommentsOn(post);
     }
 

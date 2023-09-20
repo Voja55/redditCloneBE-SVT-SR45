@@ -40,8 +40,8 @@ public class Comment {
     @ManyToOne
     private Comment repliesTo;
 
-    @ManyToOne
-    private Post commentsOn;
+    @Column(nullable = false)
+    private String commentsOn;
 
     @ManyToOne
     private User belongsTo;

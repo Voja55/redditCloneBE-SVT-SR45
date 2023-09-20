@@ -6,6 +6,7 @@ import com.example.redditclone_be.model.dto.ModeratorDTO;
 import com.example.redditclone_be.model.dto.SuspendDTO;
 import com.example.redditclone_be.model.entity.Community;
 import com.example.redditclone_be.model.entity.User;
+import com.example.redditclone_be.model.entity.elasticEntities.CommunityES;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.ModeratorService;
 import com.example.redditclone_be.service.UserService;
@@ -40,7 +41,7 @@ public class CommunityController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CommunityDTO> createCommunity(@RequestBody @Validated CommunityDTO newComm, Principal userinfo) {
 
-        Community createdComm = communityService.createCommunity(newComm);
+        CommunityES createdComm = communityService.createCommunity(newComm);
         if (createdComm == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -50,7 +51,7 @@ public class CommunityController {
         }
 
         ModeratorDTO moderatorDTO = new ModeratorDTO();
-        moderatorDTO.setCommunity(createdComm);
+        moderatorDTO.setCommunity(createdComm.getId());
         moderatorDTO.setUser(user);
         moderatorService.createMod(moderatorDTO);
 
@@ -61,13 +62,13 @@ public class CommunityController {
 
     @GetMapping("/all-available")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<Community> communityListAvailable(){
+    public List<CommunityES> communityListAvailable(){
         return communityService.allCommunitiesAvailable();
     }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Community> communityList(){
+    public List<CommunityES> communityList(){
         return communityService.allCommunities();
     }
 
@@ -79,7 +80,7 @@ public class CommunityController {
     @PutMapping("/{commID}/suspend")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> suspendCommunity(@PathVariable(value = "commID") Long id, @RequestBody @Validated SuspendDTO suspendDTO) {
-        Community suspended = communityService.findById(id);
+        CommunityES suspended = communityService.findById(id);
         if (suspended == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

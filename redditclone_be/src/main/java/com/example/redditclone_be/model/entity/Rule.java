@@ -18,6 +18,6 @@ public class Rule {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne
-    private Community belongsTo;
+    @Column
+    private String belongsTo;
 }

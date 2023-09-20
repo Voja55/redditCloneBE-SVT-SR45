@@ -5,6 +5,7 @@ import com.example.redditclone_be.model.entity.Comment;
 import com.example.redditclone_be.model.entity.Post;
 import com.example.redditclone_be.model.entity.Reaction;
 import com.example.redditclone_be.model.entity.User;
+import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 import com.example.redditclone_be.repository.ReactionRepository;
 import com.example.redditclone_be.service.CommentService;
 import com.example.redditclone_be.service.PostService;
@@ -30,9 +31,8 @@ public class ReactionServiceImplemented implements ReactionService {
     }
 
     @Override
-    public List<Reaction> findReactionsByPost(Long postId) {
-        Post post = postService.findPostById(postId);
-        List<Reaction> reactions = reactionRepository.findAllByReactingOnPost(post);
+    public List<Reaction> findReactionsByPost(String postId) {
+        List<Reaction> reactions = reactionRepository.findAllByReactingOnPost(postId);
 
         return reactions;
     }

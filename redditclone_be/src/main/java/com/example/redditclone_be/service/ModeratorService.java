@@ -21,6 +21,6 @@ public interface ModeratorService {
 
     List<Moderator> findModsByCommunity(Community community);
 
-    void deleteModeratorsByCommunity(Community community);
+    void deleteModeratorsByCommunity(String community);
 
 }

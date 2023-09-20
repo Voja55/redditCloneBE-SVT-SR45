@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findFirstById(Long id);
     List<Comment> findAllByRepliesTo(Comment comment);
-    List<Comment> findAllByCommentsOn(Post post);
+    List<Comment> findAllByCommentsOn(String post);
     List<Comment> findAllByBelongsTo(User user);
 
 }

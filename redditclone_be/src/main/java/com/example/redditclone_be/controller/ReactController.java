@@ -33,7 +33,7 @@ public class ReactController {
 
     @GetMapping("/post/{postId}/karma")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Integer postKarma(@PathVariable(value = "postId") Long postId){
+    public Integer postKarma(@PathVariable(value = "postId") String postId){
         Integer karma = 0;
         List<Reaction> reactions = reactionService.findReactionsByPost(postId);
         for(Reaction reaction : reactions){
@@ -49,20 +49,20 @@ public class ReactController {
 
     @PostMapping("/post/{postID}/upvote")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ReactDTO> upvotePost(@PathVariable(value = "postID") Long postId, Principal userinfo){
+    public ResponseEntity<ReactDTO> upvotePost(@PathVariable(value = "postID") String postId, Principal userinfo){
 
         User user = userService.findByUsername(userinfo.getName());
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        Post post = postService.findPostById(postId);
-        if (post == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
+//        Post post = postService.findPostById(postId);
+//        if (post == null) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+//        }
         ReactDTO reactDTO = new ReactDTO();
         reactDTO.setType(EReactionType.UPVOTE);
         reactDTO.setMadeBy(user);
-        reactDTO.setReactingOnPost(post);
+        reactDTO.setReactingOnPost(postId);
 
         Reaction newReact = reactionService.createReact(reactDTO);
 
@@ -72,20 +72,20 @@ public class ReactController {
     }
     @PostMapping("/post/{postID}/downvote")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ReactDTO> downvotePost(@PathVariable(value = "postID") Long postId, Principal userinfo){
+    public ResponseEntity<ReactDTO> downvotePost(@PathVariable(value = "postID") String postId, Principal userinfo){
 
         User user = userService.findByUsername(userinfo.getName());
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        Post post = postService.findPostById(postId);
-        if (post == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
+//        Post post = postService.findPostById(postId);
+//        if (post == null) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+//        }
         ReactDTO reactDTO = new ReactDTO();
         reactDTO.setType(EReactionType.DOWNVOTE);
         reactDTO.setMadeBy(user);
-        reactDTO.setReactingOnPost(post);
+        reactDTO.setReactingOnPost(postId);
 
         Reaction newReact = reactionService.createReact(reactDTO);
 

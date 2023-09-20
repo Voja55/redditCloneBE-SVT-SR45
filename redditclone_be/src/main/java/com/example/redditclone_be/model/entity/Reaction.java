@@ -27,8 +27,8 @@ public class Reaction {
     @ManyToOne
     private User madeBy;
 
-    @ManyToOne
-    private Post reactingOnPost;
+    @Column
+    private String reactingOnPost;
 
     @ManyToOne
     private Comment reactingOnCom;

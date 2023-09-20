@@ -58,9 +58,9 @@ public class User {
     @JsonIgnore
     private Set<Moderator> moderators = new HashSet<Moderator>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postedBy")
-    @JsonIgnore
-    private Set<Post> posts = new HashSet<Post>();
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "postedBy")
+//    @JsonIgnore
+//    private Set<Post> posts = new HashSet<Post>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "belongsTo")
     @JsonIgnore

@@ -14,6 +14,6 @@ public class ModeratorDTO {
 
     private Long id;
     private User user;
-    private Community community;
+    private String community;
 
 }

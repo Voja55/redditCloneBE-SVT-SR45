@@ -19,7 +19,7 @@ public class ReactDTO {
     private EReactionType type;
     private LocalDate timestamp;
     private User madeBy;
-    private Post reactingOnPost;
+    private String reactingOnPost;
     private Comment reactingOnCom;
 
     public ReactDTO(Reaction createdReaction){

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReactionService {
 
-    List<Reaction> findReactionsByPost(Long postId);
+    List<Reaction> findReactionsByPost(String postId);
     List<Reaction> findReactionsByComment(Long commId);
     List<Reaction> findReactionsByUser(String username);
     Reaction createReact(ReactDTO reactDTO);

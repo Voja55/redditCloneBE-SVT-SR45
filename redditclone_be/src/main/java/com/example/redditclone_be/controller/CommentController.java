@@ -3,6 +3,7 @@ package com.example.redditclone_be.controller;
 import com.example.redditclone_be.model.dto.CommentDTO;
 import com.example.redditclone_be.model.dto.ReactDTO;
 import com.example.redditclone_be.model.entity.*;
+import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 import com.example.redditclone_be.service.CommentService;
 import com.example.redditclone_be.service.PostService;
 import com.example.redditclone_be.service.ReactionService;
@@ -35,18 +36,18 @@ public class CommentController {
     @PostMapping("/create/onPost/{postId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CommentDTO> createCommentPost(@RequestBody @Validated CommentDTO newCom,
-                                                      @PathVariable(value = "postId") Long postId, Principal userinfo) {
+                                                      @PathVariable(value = "postId") String postId, Principal userinfo) {
 
         User user = userService.findByUsername(userinfo.getName());
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        Post post = postService.findPostById(postId);
+        PostES post = postService.findPostById(postId);
         if (post == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
         newCom.setBelongsTo(user);
-        newCom.setCommentsOn(post);
+        newCom.setCommentsOn(post.getId());
         Comment createdCom = commentService.createComment(newCom);
         if (createdCom == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
@@ -95,9 +96,9 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
-    public List<Comment> commentsOnPost(@PathVariable(value = "postId") Long postId){
-        Post post = postService.findPostById(postId);
-        return commentService.findCommentsByPost(post);
+    public List<Comment> commentsOnPost(@PathVariable(value = "postId") String postId){
+        PostES post = postService.findPostById(postId);
+        return commentService.findCommentsByPost(post.getId());
     }
 
     @GetMapping("/comment/{commentId}")

@@ -27,8 +27,8 @@ public class Banned {
     @ManyToOne
     private User isBanned;
 
-    @ManyToOne
-    private Community bannedIn;
+    @Column
+    private String bannedIn;
 
 }
 

@@ -11,7 +11,7 @@ public interface CommentService {
 
     Comment createComment(CommentDTO newCom);
     Comment findCommentById(Long id);
-    List<Comment> findCommentsByPost(Post post);
+    List<Comment> findCommentsByPost(String post);
     List<Comment> findCommentsByComment(Comment comment);
     List<Comment> findCommentsByUser(User user);
 }

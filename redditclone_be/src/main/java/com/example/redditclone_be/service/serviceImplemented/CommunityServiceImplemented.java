@@ -2,6 +2,8 @@ package com.example.redditclone_be.service.serviceImplemented;
 
 import com.example.redditclone_be.model.dto.CommunityDTO;
 import com.example.redditclone_be.model.entity.Community;
+import com.example.redditclone_be.model.entity.elasticEntities.CommunityES;
+import com.example.redditclone_be.repository.CommunityESRepository;
 import com.example.redditclone_be.repository.CommunityRepository;
 import com.example.redditclone_be.service.CommunityService;
 import org.springframework.stereotype.Service;
@@ -9,23 +11,26 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static org.elasticsearch.common.UUIDs.base64UUID;
+
 @Service
 public class CommunityServiceImplemented implements CommunityService {
 
-    final CommunityRepository communityRepository;
+    final CommunityESRepository communityRepository;
 
-    public CommunityServiceImplemented(CommunityRepository communityRepository) {
+    public CommunityServiceImplemented(CommunityESRepository communityRepository) {
         this.communityRepository = communityRepository;
     }
 
     @Override
-    public Community createCommunity(CommunityDTO communityDTO) {
-        Optional<Community> community = communityRepository.findFirstByName(communityDTO.getName());
+    public CommunityES createCommunity(CommunityDTO communityDTO) {
+        Optional<CommunityES> community = communityRepository.findFirstByName(communityDTO.getName());
 
         if (community.isPresent()){
             return null;
         }
-        Community newCommunity = new Community();
+        CommunityES newCommunity = new CommunityES();
+        newCommunity.setId(base64UUID());
         newCommunity.setName(communityDTO.getName());
         newCommunity.setDescription((communityDTO.getDescription()));
         newCommunity.setSuspended(false);
@@ -36,14 +41,14 @@ public class CommunityServiceImplemented implements CommunityService {
     }
 
     @Override
-    public List<Community> allCommunities() {
-        List<Community> communitiesList = communityRepository.findAll();
+    public List<CommunityES> allCommunities() {
+        List<CommunityES> communitiesList = communityRepository.findAll();
         return communitiesList;
     }
 
     @Override
-    public Community findById(Long id) {
-        Optional<Community> community = communityRepository.findById(id);
+    public CommunityES findById(Long id) {
+        Optional<CommunityES> community = communityRepository.findById(id);
         if(community.isPresent()){
             return community.get();
         }
@@ -51,12 +56,12 @@ public class CommunityServiceImplemented implements CommunityService {
     }
 
     @Override
-    public Community saveComm(Community community) {
+    public CommunityES saveComm(CommunityES community) {
         return communityRepository.save(community);
     }
 
     @Override
-    public List<Community> allCommunitiesAvailable() {
-        return communityRepository.findAllAvailable();
+    public List<CommunityES> allCommunitiesAvailable() {
+        return communityRepository.findAllBySuspendedIsFalse();
     }
 }

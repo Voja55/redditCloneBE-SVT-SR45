@@ -4,6 +4,7 @@ package com.example.redditclone_be.controller;
 import com.example.redditclone_be.model.dto.PostDTO;
 import com.example.redditclone_be.model.dto.ReactDTO;
 import com.example.redditclone_be.model.entity.*;
+import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.PostService;
 import com.example.redditclone_be.service.ReactionService;
@@ -35,20 +36,20 @@ public class PostController {
 
     @PostMapping("/community/{commID}/create")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<PostDTO> createPost(@RequestBody @Validated PostDTO newPost, @PathVariable(value = "commID") Long commId, Principal userinfo) {
+    public ResponseEntity<PostDTO> createPost(@RequestBody @Validated PostDTO newPost, @PathVariable(value = "commID") String commId, Principal userinfo) {
 
         User user = userService.findByUsername(userinfo.getName());
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
-        Community community = communityService.findById(commId);
-        if (community == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
+//        Community community = communityService.findById(commId);
+//        if (community == null) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+//        }
 
-        newPost.setCommunity(community);
-        newPost.setPostedBy(user);
-        Post createdPost = postService.createPost(newPost);
+        newPost.setCommunity(commId);
+        newPost.setPostedBy(user.getId().toString());
+        PostES createdPost = postService.createPost(newPost);
         if (createdPost == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -57,7 +58,7 @@ public class PostController {
         ReactDTO reactDTO = new ReactDTO();
         reactDTO.setType(EReactionType.UPVOTE);
         reactDTO.setMadeBy(user);
-        reactDTO.setReactingOnPost(createdPost);
+        reactDTO.setReactingOnPost(createdPost.getId().toString());
 
         Reaction newReact = reactionService.createReact(reactDTO);
 
@@ -69,25 +70,25 @@ public class PostController {
 
     @GetMapping("/community/{commId}/posts")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<Post> communityPosts(@PathVariable(value = "commId") Long id){
+    public List<PostES> communityPosts(@PathVariable(value = "commId") String id){
         return postService.findPostsByCommunity(id);
     }
 
     @GetMapping("/userPosts")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<Post> userPosts(Principal userInfo){
+    public List<PostES> userPosts(Principal userInfo){
         User user = userService.findByUsername(userInfo.getName());
-        return postService.findPostsByUser(user);
+        return postService.findPostsByUser(user.getId().toString());
     }
     @GetMapping("/home")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public List<Post> homePage(){
+    public List<PostES> homePage(){
         return postService.findAllHome();
     }
 
     @GetMapping("/post/{postId}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public Post getPost(@PathVariable(value="postId") Long id){
+    public PostES getPost(@PathVariable(value="postId") String id){
         return postService.findPostById(id);
     }
 

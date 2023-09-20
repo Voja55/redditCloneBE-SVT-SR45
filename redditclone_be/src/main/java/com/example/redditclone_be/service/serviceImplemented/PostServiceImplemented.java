@@ -6,6 +6,8 @@ import com.example.redditclone_be.model.entity.Community;
 import com.example.redditclone_be.model.entity.EReactionType;
 import com.example.redditclone_be.model.entity.Post;
 import com.example.redditclone_be.model.entity.User;
+import com.example.redditclone_be.model.entity.elasticEntities.PostES;
+import com.example.redditclone_be.repository.PostESRepository;
 import com.example.redditclone_be.repository.PostRepository;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.PostService;
@@ -17,25 +19,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.elasticsearch.common.UUIDs.base64UUID;
+
 @Service
 public class PostServiceImplemented implements PostService {
 
-    final PostRepository postRepository;
+    final PostESRepository postRepository;
     final CommunityService communityService;
 
-    public PostServiceImplemented(PostRepository postRepository, CommunityService communityService) {
+    public PostServiceImplemented(PostESRepository postRepository, CommunityService communityService) {
         this.postRepository = postRepository;
         this.communityService = communityService;
     }
 
     @Override
-    public Post createPost(PostDTO postDTO) {
+    public PostES createPost(PostDTO postDTO) {
 
 //        Optional<Post> post = postRepository.findById(postDTO.getId());
 //        if(post.isPresent()){
 //            return null;
 //        }
-        Post newPost = new Post();
+        PostES newPost = new PostES();
+        newPost.setId(base64UUID());
         newPost.setTitle(postDTO.getTitle());
         newPost.setText(postDTO.getText());
         newPost.setCommunity(postDTO.getCommunity());
@@ -47,28 +52,28 @@ public class PostServiceImplemented implements PostService {
     }
 
     @Override
-    public List<Post> findPostsByCommunity(Long commId) {
-        Community community = communityService.findById(commId);
-        List<Post> postsList =  postRepository.findAllByCommunity(community);
+    public List<PostES> findPostsByCommunity(String commId) {
+        //Community community = communityService.findById(commId);
+        List<PostES> postsList =  postRepository.findAllByCommunity(commId);
 
         return postsList;
     }
 
     @Override
-    public List<Post> findPostsByUser(User user) {
+    public List<PostES> findPostsByUser(String user) {
         return postRepository.findAllByPostedBy(user);
     }
 
     @Override
-    public List<Post> findAllHome() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostES> findAllHome() {
+        List<PostES> posts = postRepository.findAll();
         Collections.shuffle(posts);
         return posts;
     }
 
     @Override
-    public Post findPostById(Long postId) {
-        Optional<Post> post = postRepository.findFirstById(postId);
+    public PostES findPostById(String postId) {
+        Optional<PostES> post = postRepository.findFirstById(postId);
         if (post.isPresent()){
             return post.get();
         }
