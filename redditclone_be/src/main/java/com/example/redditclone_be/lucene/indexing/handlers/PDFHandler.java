@@ -1,6 +1,7 @@
 package com.example.redditclone_be.lucene.indexing.handlers;
 
 import com.example.redditclone_be.model.entity.Post;
+import com.example.redditclone_be.model.entity.elasticEntities.CommunityES;
 import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 import org.apache.lucene.document.DateTools;
 import org.apache.pdfbox.io.RandomAccessFile;
@@ -16,13 +17,13 @@ import java.util.Date;
 
 public class PDFHandler extends DocumentHandler{
     @Override
-    public PostES getIndexUnit(File file) {
+    public PostES getIndexUnitPost(File file) {
         PostES retVal = new PostES();
         try {
             PDFParser parser = new PDFParser((RandomAccessRead) new RandomAccessFile(file, "r"));
             parser.parse();
             String text = getText(parser);
-            retVal.setText(text);
+            retVal.setFileText(text);
 
             // metadata extraction
             PDDocument pdf = parser.getPDDocument();
@@ -30,6 +31,37 @@ public class PDFHandler extends DocumentHandler{
 
             String title = ""+info.getTitle();
             retVal.setTitle(title);
+
+            String keywords = ""+info.getKeywords();
+            retVal.setKeywords(keywords);
+
+            retVal.setFilename(file.getCanonicalPath());
+
+            String modificationDate= DateTools.dateToString(new Date(file.lastModified()), DateTools.Resolution.DAY);
+
+            pdf.close();
+        } catch (IOException e) {
+            System.out.println("Greksa pri konvertovanju dokumenta u pdf");
+        }
+
+        return retVal;
+    }
+
+    @Override
+    public CommunityES getIndexUnitCommunity(File file) {
+        CommunityES retVal = new CommunityES();
+        try {
+            PDFParser parser = new PDFParser((RandomAccessRead) new RandomAccessFile(file, "r"));
+            parser.parse();
+            String text = getText(parser);
+            retVal.setFileText(text);
+
+            // metadata extraction
+            PDDocument pdf = parser.getPDDocument();
+            PDDocumentInformation info = pdf.getDocumentInformation();
+
+            String title = ""+info.getTitle();
+            retVal.setName(title);
 
             String keywords = ""+info.getKeywords();
             retVal.setKeywords(keywords);

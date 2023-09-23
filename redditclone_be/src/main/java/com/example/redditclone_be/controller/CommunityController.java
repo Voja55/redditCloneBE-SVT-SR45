@@ -2,6 +2,7 @@ package com.example.redditclone_be.controller;
 
 
 import com.example.redditclone_be.model.dto.CommunityDTO;
+import com.example.redditclone_be.model.dto.CommunityPdfDTO;
 import com.example.redditclone_be.model.dto.ModeratorDTO;
 import com.example.redditclone_be.model.dto.SuspendDTO;
 import com.example.redditclone_be.model.entity.Community;
@@ -17,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -60,6 +62,39 @@ public class CommunityController {
         return new ResponseEntity(communityDTO, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping(path = "/createPdf", consumes = {"multipart/form-data"})
+    public ResponseEntity<CommunityDTO> createCommunityPDF(@ModelAttribute CommunityPdfDTO newComm, Principal userinfo) throws IOException {
+
+        if (newComm.getName() == null || newComm.getDescription() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        CommunityDTO communityDTO = new CommunityDTO();
+        communityDTO.setName(newComm.getName());
+        communityDTO.setDescription(newComm.getDescription());
+        CommunityES communityES = communityService.createCommunity(communityDTO);
+
+        newComm.setId(communityES.getId());
+        newComm.setSuspended(communityES.isSuspended());
+        newComm.setPostsNum(communityES.getPostsNum());
+        newComm.setCreationDate(communityES.getCreationDate());
+
+        communityService.indexUploadedFileCommunity(newComm);
+
+        User user = userService.findByUsername(userinfo.getName());
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        ModeratorDTO moderatorDTO = new ModeratorDTO();
+        moderatorDTO.setCommunity(newComm.getId());
+        moderatorDTO.setUser(user);
+        moderatorService.createMod(moderatorDTO);
+
+        return new ResponseEntity(new CommunityDTO(communityES), HttpStatus.CREATED);
+    }
+
     @GetMapping("/all-available")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<CommunityES> communityListAvailable(){
@@ -75,6 +110,11 @@ public class CommunityController {
     @GetMapping("/{commID}")
     public CommunityDTO community(@PathVariable(value = "commID") Long id){
         return modelMapper.map(communityService.findById(id), CommunityDTO.class);
+    }
+
+    @GetMapping("/search")
+    public List<CommunityES> communitySearchTitle(@PathVariable(value = "input")String input, @PathVariable(value = "from") long from, @PathVariable(value = "to") long to){
+        return communityService.communitySearch(input, from, to);
     }
 
     @PutMapping("/{commID}/suspend")

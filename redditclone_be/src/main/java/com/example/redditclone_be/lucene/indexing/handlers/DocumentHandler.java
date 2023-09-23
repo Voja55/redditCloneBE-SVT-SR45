@@ -1,6 +1,7 @@
 package com.example.redditclone_be.lucene.indexing.handlers;
 
 import com.example.redditclone_be.model.entity.Post;
+import com.example.redditclone_be.model.entity.elasticEntities.CommunityES;
 import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public abstract class DocumentHandler {
      *            datoteka u kojoj se nalaze informacije
      * @return Lucene Document
      */
-    public abstract PostES getIndexUnit(File file);
+    public abstract PostES getIndexUnitPost(File file);
+    public abstract CommunityES getIndexUnitCommunity(File file);
     public abstract String getText(File file);
 }

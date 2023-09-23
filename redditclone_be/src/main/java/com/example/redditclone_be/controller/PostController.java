@@ -1,9 +1,9 @@
 package com.example.redditclone_be.controller;
 
 
-import com.example.redditclone_be.model.dto.PostDTO;
-import com.example.redditclone_be.model.dto.ReactDTO;
+import com.example.redditclone_be.model.dto.*;
 import com.example.redditclone_be.model.entity.*;
+import com.example.redditclone_be.model.entity.elasticEntities.CommunityES;
 import com.example.redditclone_be.model.entity.elasticEntities.PostES;
 import com.example.redditclone_be.service.CommunityService;
 import com.example.redditclone_be.service.PostService;
@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -58,13 +59,51 @@ public class PostController {
         ReactDTO reactDTO = new ReactDTO();
         reactDTO.setType(EReactionType.UPVOTE);
         reactDTO.setMadeBy(user);
-        reactDTO.setReactingOnPost(createdPost.getId().toString());
+        reactDTO.setReactingOnPost(createdPost.getId());
 
         Reaction newReact = reactionService.createReact(reactDTO);
+        //communityService.editPostNum(createdPost);
 
         ReactDTO newReactDTO = new ReactDTO(newReact);
 
         return new ResponseEntity(postDTO, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping(path = "/community/{commID}/createPdf", consumes = {"multipart/form-data"})
+    public ResponseEntity<PostDTO> createPostPDF(@ModelAttribute PostPdfDTO newPost,
+                                                 @PathVariable(value = "commID") String commId, Principal userinfo) throws IOException {
+
+        if (newPost.getTitle() == null || newPost.getText() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User user = userService.findByUsername(userinfo.getName());
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        PostDTO postDTO = new PostDTO();
+        postDTO.setCommunity(commId);
+        postDTO.setTitle(newPost.getTitle());
+        postDTO.setText(newPost.getText());
+        postDTO.setPostedBy(user.getId().toString());
+        PostES postES = postService.createPost(postDTO);
+
+        newPost.setId(postES.getId());
+        newPost.setTitle(postES.getTitle());
+        newPost.setText(postES.getText());
+        newPost.setCommunity(postES.getCommunity());
+        newPost.setPostedBy(postES.getPostedBy());
+        newPost.setKarma(postES.getKarma());
+        postService.indexUploadedFilePost(newPost);
+
+        ReactDTO reactDTO = new ReactDTO();
+        reactDTO.setType(EReactionType.UPVOTE);
+        reactDTO.setMadeBy(user);
+        reactDTO.setReactingOnPost(newPost.getId());
+        reactionService.createReact(reactDTO);
+
+        return new ResponseEntity(new PostDTO(postES), HttpStatus.CREATED);
     }
 
 

@@ -30,11 +30,16 @@ public class CommunityES {
     private boolean isSuspended;
     @Field(type = FieldType.Text)
     private String suspendedReason;
+    @Field(type = FieldType.Integer)
+    private Integer postsNum;
 
     @Field(type = FieldType.Text)
     private String filePath;
     @Field(type = FieldType.Text)
     private String fileText;
+
+    private String keywords;
+    private String filename;
 
 
 }

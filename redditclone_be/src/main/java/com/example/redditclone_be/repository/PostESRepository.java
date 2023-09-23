@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PostESRepository extends ElasticsearchRepository<PostES, Integer> {
+public interface PostESRepository extends ElasticsearchRepository<PostES, String> {
     List<PostES> findAll();
 
     List<PostES> findAllByCommunity(String communityId);

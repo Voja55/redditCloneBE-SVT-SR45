@@ -61,6 +61,7 @@ public class ReactionServiceImplemented implements ReactionService {
         newReact.setMadeBy(reactDTO.getMadeBy());
 
         newReact = reactionRepository.save(newReact);
+        postService.editKarma(newReact);
 
         return newReact;
     }

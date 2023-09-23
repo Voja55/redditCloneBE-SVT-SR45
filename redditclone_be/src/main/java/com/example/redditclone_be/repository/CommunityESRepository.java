@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CommunityESRepository extends ElasticsearchRepository<CommunityES, Integer> {
+public interface CommunityESRepository extends ElasticsearchRepository<CommunityES, String> {
 
     List<CommunityES> findAll();
     Optional<CommunityES> findFirstByName(String name);
